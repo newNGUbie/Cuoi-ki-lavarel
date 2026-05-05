@@ -1,104 +1,131 @@
-<div id="header">
-	<div class="header-top">
-		<div class="container">
-			<div class="pull-left auto-width-left">
-				<ul class="top-menu menu-beta l-inline">
-					<li><a href=""><i class="fa fa-home"></i> 90-92 Lê Thị Riêng, Bến Thành, Quận 1</a></li>
-					<li><a href=""><i class="fa fa-phone"></i> 0163 296 7751</a></li>
-				</ul>
-			</div>
-			<div class="pull-right auto-width-right">
-				<ul class="top-details menu-beta l-inline">
-                    @if(Auth::check())
-                        <li><a href="#"><i class="fa fa-user"></i>Chào bạn {{ Auth::user()->full_name }}</a></li>
-                        <li><a href="{{ route('getlogout') }} "><i class="fa fa-user"></i>Đăng xuất</a></li>
-                    @else
-                        <li><a href="{{ route('getsignin') }}">Đăng kí</a></li>
-                        <li><a href="{{ route('getlogin') }}">Đăng nhập</a></li>
+<div id="header" class="hw-header">
+    <div class="header-top hw-topbar">
+        <div class="container hw-topbar-inner">
+            <div class="hw-top-left">
+                <div class="hw-top-item"><i class="fa fa-map-marker"></i> 123 Đường Láng, Đống Đa, Hà Nội</div>
+                <a href="tel:02834567890" class="hw-top-item"><i class="fa fa-phone"></i> 028 3456 7890</a>
+            </div>
+            <div class="hw-top-right">
+                @if (Auth::check())
+                    @php($isAdminUser = in_array(Auth::user()->level, [1, 2]))
+                    <a href="{{ route('user.profile') }}" class="hw-top-item"><i class="fa fa-user"></i>
+                        {{ Auth::user()->full_name }}</a>
+                    @if ($isAdminUser)
+                        <a class="hw-top-item" href="{{ route('admin.getCateList') }}"><i class="fa fa-dashboard"></i>
+                            Quản trị</a>
                     @endif
-				</ul>
-			</div>
-			<div class="clearfix"></div>
-		</div> <!-- .container -->
-	</div> <!-- .header-top -->
-	<div class="header-body">
-		<div class="container beta-relative">
-			<div class="pull-left">
-				<a href="{{ route('banhang.index') }}" id="logo"><img src="{{ asset('source/assets/dest/images/logo-cake.png') }}" width="200px" alt=""></a>
-			</div>
-			<div class="pull-right beta-components space-left ov">
-				<div class="space10">&nbsp;</div>
-				<div class="beta-comp">
-					<form role="search" method="get" id="searchform" action="{{ route('banhang.search') }}">
-						<input type="text" value="" name="key" id="s" placeholder="Nhập từ khóa..." />
-						<button class="fa fa-search" type="submit" id="searchsubmit"></button>
-					</form>
-				</div>
+                    <a href="{{ route('getlogout') }}" class="hw-top-item"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+                @else
+                    <a href="{{ route('getsignin') }}" class="hw-top-item">Đăng ký</a>
+                    <a href="{{ route('getlogin') }}" class="hw-top-item highlight">Đăng nhập</a>
+                @endif
+            </div>
+        </div>
+    </div>
 
-				<div class="beta-comp">
-					<div class="cart">
-						<div class="beta-select">
-                            <a href="{{ route('banhang.giohang') }}"><i class="fa fa-shopping-cart"></i> Giỏ hàng (@if(Session::has('cart')){{ Session('cart')->totalQty }} @else Trống @endif)</a>
-                            <i class="fa fa-chevron-down"></i>
+    <div class="header-body hw-brandbar">
+        <div class="container hw-brandbar-inner">
+            <div class="hw-logo-area">
+                <a href="{{ route('banhang.index') }}" id="logo" class="hw-logo">
+                    <img src="https://img.icons8.com/color/96/home-automation.png" alt="Logo">
+                    <span class="hw-logo-text">Gia Dụng <span class="highlight">Smart</span></span>
+                </a>
+            </div>
+
+            <div class="hw-search-area">
+                <form role="search" method="get" id="searchform" class="hw-search"
+                    action="{{ route('banhang.search') }}">
+                    <input type="text" value="{{ request('key') }}" name="key" id="s"
+                        placeholder="Tìm kiếm sản phẩm..." />
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+
+            <div class="hw-quick-actions">
+                <div class="hw-action-item">
+                    <a class="hw-icon-btn" href="{{ route('wishlist.index') }}">
+                        <i class="fa fa-heart"></i>
+                        <span class="hw-count">0</span>
+                    </a>
+                    <span class="hw-action-label">Yêu thích</span>
+                </div>
+
+                <div class="hw-action-item hw-cart">
+                    <a class="hw-icon-btn" href="{{ route('banhang.giohang') }}">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="hw-count">
+                            @if (Session::has('cart'))
+                                {{ Session('cart')->totalQty }}
+                            @else
+                                0
+                            @endif
+                        </span>
+                    </a>
+                    <span class="hw-action-label">Giỏ hàng</span>
+                    @if (Session::has('cart'))
+                        <div class="beta-dropdown cart-body hw-cart-dropdown">
+                            @foreach ($productCarts as $product)
+                                <div class="cart-item">
+                                    <a class="cart-item-delete"
+                                        href="{{ route('banhang.xoagiohang', $product['item']['id']) }}"><i
+                                            class="fa fa-times"></i></a>
+                                    <div class="media">
+                                        <a class="pull-left"
+                                            href="{{ route('banhang.chitiet', $product['item']['id']) }}"><img
+                                                src="/source/image/product/{{ $product['item']['image'] ?: 'placeholder.png' }}"
+                                                alt=""></a>
+                                        <div class="media-body">
+                                            <span class="cart-item-title">{{ $product['item']['name'] }}</span>
+                                            <span class="cart-item-amount">{{ $product['qty'] }} x
+                                                @if ($product['item']['promotion_price'] == 0)
+                                                    {{ number_format($product['item']['unit_price']) }} đ
+                                                @else
+                                                    {{ number_format($product['item']['promotion_price']) }} đ
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <div class="cart-caption">
+                                <div class="cart-total text-right">Tổng tiền: <span
+                                        class="cart-total-value">{{ number_format($totalPrice) }} đ</span></div>
+                                <div class="center hw-cart-actions">
+                                    <a href="{{ route('banhang.giohang') }}" class="beta-btn primary text-center">Chi
+                                        tiết</a>
+                                    <a href="{{ route('banhang.getdathang') }}"
+                                        class="beta-btn primary text-center">Đặt hàng</a>
+                                </div>
+                            </div>
                         </div>
-						@if(Session::has('cart'))
-						<div class="beta-dropdown cart-body">
-							@foreach($productCarts as $product)
-							<div class="cart-item">
-                                <a class="cart-item-delete" href="{{ route('banhang.xoagiohang', $product['item']['id']) }}"><i class="fa fa-times"></i></a>
-								<div class="media">
-									<a class="pull-left" href="#"><img src="/source/image/product/{{$product['item']['image']}}" alt=""></a>
-									<div class="media-body">
-										<span class="cart-item-title">{{ $product['item']['name'] }}</span>
-										<span class="cart-item-amount">{{ $product['qty'] }}*<span>
-                                            @if($product['item']['promotion_price'] == 0)
-                                                {{ number_format($product['item']['unit_price']) }}
-                                            @else
-                                                {{ number_format($product['item']['promotion_price']) }}
-                                            @endif
-                                        </span></span>
-									</div>
-								</div>
-							</div>
-							@endforeach
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 
-							<div class="cart-caption">
-								<div class="cart-total text-right">Tổng tiền: <span class="cart-total-value">{{ number_format($totalPrice) }} đồng</span></div>
-								<div class="clearfix"></div>
-
-								<div class="center">
-									<div class="space10">&nbsp;</div>
-                                    <a href="{{ route('banhang.giohang') }}" class="beta-btn primary text-center">Chi tiết <i class="fa fa-chevron-right"></i></a>
-									<a href="{{ route('banhang.getdathang') }}" class="beta-btn primary text-center" style="background-color: #ed1c24;">Đặt hàng <i class="fa fa-chevron-right"></i></a>
-								</div>
-							</div>
-						</div>
-						@endif
-					</div> <!-- .cart -->
-				</div>
-			</div>
-			<div class="clearfix"></div>
-		</div> <!-- .container -->
-	</div> <!-- .header-body -->
-	<div class="header-bottom" style="background-color: #0277b8;">
-		<div class="container">
-			<a class="visible-xs beta-menu-toggle pull-right" href="#"><span class='beta-menu-toggle-text'>Menu</span> <i class="fa fa-bars"></i></a>
-			<div class="visible-xs clearfix"></div>
-			<nav class="main-menu">
-				<ul class="l-inline ov">
-					<li><a href="{{ route('banhang.index') }}">Trang chủ</a></li>
-					<li><a href="#">Sản phẩm</a>
-						<ul class="sub-menu">
-							@foreach($loai_sp as $loai)
-							<li><a href="{{ route('banhang.loaisanpham', $loai->id) }}">{{ $loai->name }}</a></li>
-							@endforeach
-						</ul>
-					</li>
-					<li><a href="#">Giới thiệu</a></li>
-					<li><a href="#">Liên hệ</a></li>
-				</ul>
-				<div class="clearfix"></div>
-			</nav>
-		</div> <!-- .container -->
-	</div> <!-- .header-bottom -->
-</div> <!-- #header -->
+    <div class="header-bottom hw-nav">
+        <div class="container">
+            <a class="visible-xs beta-menu-toggle pull-right" href="#"><span
+                    class='beta-menu-toggle-text'>Menu</span> <i class="fa fa-bars"></i></a>
+            <div class="visible-xs clearfix"></div>
+            <nav class="main-menu">
+                <ul class="l-inline ov">
+                    <li><a href="{{ route('banhang.index') }}">Trang chủ</a></li>
+                    <li><a href="#">Sản phẩm</a>
+                        <ul class="sub-menu">
+                            @foreach ($loai_sp as $loai)
+                                <li><a href="{{ route('banhang.loaisanpham', $loai->id) }}">{{ $loai->name }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                    <li><a href="{{ route('wishlist.index') }}">Yêu thích</a></li>
+                    <li><a href="{{ route('contact.get') }}">Liên hệ</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </nav>
+        </div>
+    </div>
+</div>

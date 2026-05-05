@@ -9,6 +9,10 @@ use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminOrderController;
 
+Route::get('/', function () {
+    return redirect()->route('banhang.index');
+});
+
 // Trang chủ
 Route::get('/trangchu', [PageController::class, 'getIndex'])->name('banhang.index');
 
@@ -45,6 +49,25 @@ Route::get('/search', [PageController::class, 'getSearch'])->name('banhang.searc
 // Đặt hàng
 Route::get('checkout', [PageController::class, 'getCheckout'])->name('banhang.getdathang');
 Route::post('checkout', [PageController::class, 'postCheckout'])->name('banhang.postdathang');
+Route::post('checkout/apply-coupon', [PageController::class, 'postApplyCoupon'])->name('banhang.coupon.apply');
+Route::post('checkout/remove-coupon', [PageController::class, 'postRemoveCoupon'])->name('banhang.coupon.remove');
+
+// Gửi Email Reset Password
+Route::get('/input-email', [PageController::class, 'getInputEmail'])->name('getInputEmail');
+Route::post('/input-email', [PageController::class, 'postInputEmail'])->name('postInputEmail');
+
+// Wishlist
+Route::get('/wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
+Route::get('/wishlist/add/{id}', [\App\Http\Controllers\WishlistController::class, 'add'])->name('wishlist.add');
+Route::get('/wishlist/remove/{id}', [\App\Http\Controllers\WishlistController::class, 'remove'])->name('wishlist.remove');
+
+// User Profile
+Route::get('/profile', [PageController::class, 'getProfile'])->name('user.profile');
+Route::post('/profile', [PageController::class, 'postProfile'])->name('user.profile.update');
+
+// Liên hệ
+Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'getContact'])->name('contact.get');
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'postContact'])->name('contact.post');
 
 // ADMIN ROUTES
 Route::get('/admin/dangnhap', [UserController::class, 'getLogin'])->name('admin.getLogin');
@@ -76,6 +99,10 @@ Route::prefix('admin')->group(function () {
         // User
         Route::group(['prefix' => 'user'], function () {
             Route::get('danhsach', [AdminUserController::class, 'getList'])->name('admin.user.list');
+            Route::get('them', [AdminUserController::class, 'getAdd'])->name('admin.user.getAdd');
+            Route::post('them', [AdminUserController::class, 'postAdd'])->name('admin.user.postAdd');
+            Route::get('sua/{id}', [AdminUserController::class, 'getEdit'])->name('admin.user.getEdit');
+            Route::post('sua/{id}', [AdminUserController::class, 'postEdit'])->name('admin.user.postEdit');
             Route::get('xoa/{id}', [AdminUserController::class, 'getDelete'])->name('admin.user.getDelete');
         });
 
@@ -83,6 +110,21 @@ Route::prefix('admin')->group(function () {
         Route::group(['prefix' => 'order'], function () {
             Route::get('danhsach', [AdminOrderController::class, 'getList'])->name('admin.order.list');
             Route::get('xoa/{id}', [AdminOrderController::class, 'getDelete'])->name('admin.order.getDelete');
+            Route::post('trangthai/{id}', [AdminOrderController::class, 'postUpdateStatus'])->name('admin.order.postUpdateStatus');
+        });
+        // Contact
+        Route::prefix('contact')->group(function () {
+            Route::get('/danhsach', [\App\Http\Controllers\AdminContactController::class, 'index'])->name('admin.contact.index');
+            Route::post('/update-status/{id}', [\App\Http\Controllers\AdminContactController::class, 'postUpdateStatus'])->name('admin.contact.postUpdateStatus');
+        });
+        // Slide
+        Route::prefix('slide')->group(function () {
+            Route::get('danhsach', [\App\Http\Controllers\AdminSlideController::class, 'getList'])->name('admin.slide.getList');
+            Route::get('them', [\App\Http\Controllers\AdminSlideController::class, 'getAdd'])->name('admin.slide.getAdd');
+            Route::post('them', [\App\Http\Controllers\AdminSlideController::class, 'postAdd'])->name('admin.slide.postAdd');
+            Route::get('sua/{id}', [\App\Http\Controllers\AdminSlideController::class, 'getEdit'])->name('admin.slide.getEdit');
+            Route::post('sua/{id}', [\App\Http\Controllers\AdminSlideController::class, 'postEdit'])->name('admin.slide.postEdit');
+            Route::get('xoa/{id}', [\App\Http\Controllers\AdminSlideController::class, 'getDelete'])->name('admin.slide.getDelete');
         });
     });
 });

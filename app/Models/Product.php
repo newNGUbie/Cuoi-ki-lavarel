@@ -11,6 +11,27 @@ class Product extends Model
 
     protected $table = 'products';
 
+    protected $fillable = [
+        'name',
+        'id_type',
+        'description',
+        'unit_price',
+        'promotion_price',
+        'image',
+        'unit',
+        'new',
+        'stock',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'unit_price' => 'decimal:2',
+            'promotion_price' => 'decimal:2',
+            'new' => 'boolean',
+        ];
+    }
+
     public function product_type()
     {
         return $this->belongsTo(ProductType::class, 'id_type', 'id');

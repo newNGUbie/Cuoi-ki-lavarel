@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'messenger' => [
+        'page_id' => env('MESSENGER_PAGE_ID'),
+        'page_url' => env('MESSENGER_PAGE_URL'),
+    ],
+
 ];

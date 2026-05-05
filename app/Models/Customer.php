@@ -10,6 +10,15 @@ class Customer extends Model
     use HasFactory;
     protected $table = 'customer';
 
+    protected $fillable = [
+        'name',
+        'gender',
+        'email',
+        'address',
+        'phone_number',
+        'note',
+    ];
+
     public function bill()
     {
         return $this->hasMany(Bill::class, 'id_customer', 'id');

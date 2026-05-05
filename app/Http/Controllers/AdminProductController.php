@@ -39,7 +39,7 @@ class AdminProductController extends Controller
         $product->description = $request->description;
         $product->unit_price = $request->unit_price;
         $product->promotion_price = $request->promotion_price;
-        $product->image = $request->image; // Simplified, usually handle upload
+        $product->image = $request->image ?: 'placeholder.png';
         $product->unit = $request->unit;
         $product->new = $request->new;
         $product->save();
@@ -79,7 +79,7 @@ class AdminProductController extends Controller
         $product->description = $request->description;
         $product->unit_price = $request->unit_price;
         $product->promotion_price = $request->promotion_price;
-        $product->image = $request->image;
+        $product->image = $request->image ?: 'placeholder.png';
         $product->unit = $request->unit;
         $product->new = $request->new;
         $product->save();

@@ -4,13 +4,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">User
-                    <small>List</small>
+                <h1 class="page-header">Tài khoản
+                    <small>Danh sách</small>
                 </h1>
+                <a href="{{ route('admin.user.getAdd') }}" class="btn btn-primary" style="margin-bottom: 15px;">
+                    <i class="fa fa-plus"></i> Thêm tài khoản
+                </a>
             </div>
             @if(session('success'))
                 <div class="alert alert-success">
                     {{session('success')}}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{session('error')}}
                 </div>
             @endif
             <!-- /.col-lg-12 -->
@@ -18,11 +26,13 @@
                 <thead>
                     <tr align="center">
                         <th>ID</th>
-                        <th>Name</th>
+                        <th>Họ tên</th>
                         <th>Email</th>
-                        <th>Level</th>
-                        <th>Delete</th>
-                        <th>Edit</th>
+                        <th>Điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Quyền</th>
+                        <th>Xóa</th>
+                        <th>Sửa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,17 +41,19 @@
                         <td>{{$u->id}}</td>
                         <td>{{$u->full_name}}</td>
                         <td>{{$u->email}}</td>
+                        <td>{{$u->phone}}</td>
+                        <td>{{$u->address}}</td>
                         <td>
                             @if($u->level == 1)
-                                Admin
+                                Quản trị viên
                             @elseif($u->level == 2)
-                                Technical
+                                Nhân viên
                             @else
-                                Customer
+                                Khách hàng
                             @endif
                         </td>
-                        <td class="center"><i class="fa fa-trash-o fa-fw"></i><a href="{{ route('admin.user.getDelete', $u->id) }}"> Delete</a></td>
-                        <td class="center"><i class="fa fa-pencil fa-fw"></i> <a href="#">Edit</a></td>
+                        <td class="center"><i class="fa fa-trash-o fa-fw"></i><a href="{{ route('admin.user.getDelete', $u->id) }}" onclick="return confirm('Bạn có chắc muốn xóa tài khoản này?')"> Xóa</a></td>
+                        <td class="center"><i class="fa fa-pencil fa-fw"></i> <a href="{{ route('admin.user.getEdit', $u->id) }}">Sửa</a></td>
                     </tr>
                     @endforeach
                 </tbody>

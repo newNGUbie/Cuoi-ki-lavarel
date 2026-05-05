@@ -44,5 +44,13 @@ class DatabaseSeeder extends Seeder
             'address' => 'Đà Nẵng',
             'level' => 3
         ]);
+
+        $this->call([
+            TypeProductsSeeder::class,
+            ProductsSeeder::class,
+            SlidesSeeder::class,
+            ShippingFeesSeeder::class,
+            CouponsSeeder::class,
+        ]);
     }
 }

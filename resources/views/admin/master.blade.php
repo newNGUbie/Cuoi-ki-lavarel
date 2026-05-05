@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Cafe Amian">
+    <meta name="description" content="Quản trị shop đồ gia dụng">
     <meta name="author" content="">
-    <title>Admin Bán hàng</title>
+    <title>Admin — {{ config('app.name') }}</title>
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('source/admin/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- MetisMenu CSS -->
@@ -19,6 +19,7 @@
     <link href="{{ asset('source/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}" rel="stylesheet">
     <!-- DataTables Responsive CSS -->
     <link href="{{ asset('source/admin/bower_components/datatables-responsive/css/dataTables.responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('source/assets/dest/css/admin-houseware-ui.css') }}" rel="stylesheet">
     @yield('css')
 </head>
 <body>

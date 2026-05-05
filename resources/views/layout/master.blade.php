@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Laravel Shop </title>
+	<title>{{ config('app.name') }}</title>
 	<link href='http://fonts.googleapis.com/css?family=Dosis:300,400' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 
@@ -15,10 +15,22 @@
 	<link rel="stylesheet" title="style" href="{{ asset('source/assets/dest/css/style.css') }}">
 	<link rel="stylesheet" href="{{ asset('source/assets/dest/css/animate.css') }}">
 	<link rel="stylesheet" title="style" href="{{ asset('source/assets/dest/css/huong-style.css') }}">
+	<link rel="stylesheet" href="{{ asset('source/assets/dest/css/houseware-ui.css') }}">
 </head>
 <body>
 
 	@include('layout.header')
+
+	@if(session('success'))
+		<div class="container" style="margin-top: 10px;">
+			<div class="alert alert-success">{{ session('success') }}</div>
+		</div>
+	@endif
+	@if(session('error'))
+		<div class="container" style="margin-top: 10px;">
+			<div class="alert alert-danger">{{ session('error') }}</div>
+		</div>
+	@endif
 
 	<div class="rev-slider">
 		@yield('banner')
@@ -57,5 +69,32 @@
 		})
 	})
 	</script>
+
+	@if(config('services.messenger.page_id'))
+		<div id="fb-root"></div>
+		<div id="fb-customer-chat" class="fb-customerchat"></div>
+		<script>
+			var chatbox = document.getElementById('fb-customer-chat');
+			chatbox.setAttribute('page_id', {!! json_encode(config('services.messenger.page_id')) !!});
+			chatbox.setAttribute('attribution', 'biz_inbox');
+			window.fbAsyncInit = function() {
+				FB.init({
+					xfbml: true,
+					version: 'v19.0'
+				});
+			};
+			(function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		</script>
+	@elseif(config('services.messenger.page_url'))
+		<a href="{{ config('services.messenger.page_url') }}" target="_blank" rel="noopener" style="position: fixed; right: 18px; bottom: 18px; z-index: 9999; background: #0084ff; color: #fff; width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,.22); font-size: 24px;" title="Chat Messenger">
+			<i class="fa fa-comments"></i>
+		</a>
+	@endif
 </body>
 </html>

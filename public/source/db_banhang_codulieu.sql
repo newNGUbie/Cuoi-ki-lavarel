@@ -10,6 +10,13 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+-- Tắt kiểm tra khóa ngoại
+SET FOREIGN_KEY_CHECKS=0;
+
+-- Nếu lệnh DROP DATABASE lỗi #1010, hãy xóa thủ công thư mục trong mysql/data
+-- DROP DATABASE IF EXISTS `new_shop`;
+CREATE DATABASE IF NOT EXISTS `new_shop` CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `new_shop`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -20,40 +27,33 @@ SET time_zone = "+00:00";
 -- Database: `db_banhang`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `bills`
---
-create database if not exists new_shop;
-use new_shop;
-
 --
 -- Table structure for table `customer`
 --
 
+DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `gender` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `address` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `phone_number` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `note` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `customer`
 --
 
 INSERT INTO `customer` (`id`, `name`, `gender`, `email`, `address`, `phone_number`, `note`, `created_at`, `updated_at`) VALUES
-(15, 'ê', 'Nữ', 'huongnguyen@gmail.com', 'e', 'e', 'e', '2017-03-24 07:14:32', '2017-03-24 07:14:32'),
-(14, 'hhh', 'nam', 'huongnguyen@gmail.com', 'Lê thị riêng', '99999999999999999', 'k', '2017-03-23 04:46:05', '2017-03-23 04:46:05'),
-(13, 'Hương Hương', 'Nữ', 'huongnguyenak96@gmail.com', 'Lê Thị Riêng, Quận 1', '23456789', 'Vui lòng giao hàng trước 5h', '2017-03-21 07:29:31', '2017-03-21 07:29:31'),
-(12, 'Khoa phạm', 'Nam', 'khoapham@gmail.com', 'Lê thị riêng', '1234567890', 'Vui lòng chuyển đúng hạn', '2017-03-21 07:20:07', '2017-03-21 07:20:07'),
-(11, 'Hương Hương', 'Nữ', 'huongnguyenak96@gmail.com', 'Lê Thị Riêng, Quận 1', '234567890-', 'không chú', '2017-03-21 07:16:09', '2017-03-21 07:16:09');
+(15, 'Nguyễn Văn An', 'Nam', 'an.nguyen@gmail.com', '123 Cách Mạng Tháng 8, Quận 3', '0901234567', 'Giao hàng giờ hành chính', NOW(), NOW()),
+(14, 'Lê Thị Bình', 'Nữ', 'binh.le@gmail.com', '456 Hoàng Diệu, Quận 4', '0912345678', 'Hàng dễ vỡ, xin cẩn thận', NOW(), NOW()),
+(13, 'Phạm Hồng Phúc', 'Nam', 'phuc.pham@gmail.com', '789 Mai Chí Thọ, Quận 2', '0988888888', 'Giao hàng sau 5h chiều', NOW(), NOW()),
+(12, 'Đỗ Minh Khoa', 'Nam', 'khoa.do@gmail.com', '321 Lê Lợi, Quận 1', '0945666777', '', NOW(), NOW()),
+(11, 'Trần Thu Thảo', 'Nữ', 'thao.tran@gmail.com', '159 Lý Tự Trọng, Quận 1', '0933445566', 'Gọi trước khi đến', NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -61,52 +61,54 @@ INSERT INTO `customer` (`id`, `name`, `gender`, `email`, `address`, `phone_numbe
 -- Table structure for table `news`
 --
 
+DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
-  `id` int(10) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'tiêu đề',
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'nội dung',
   `image` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'hình',
-  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `news`
 --
 
-INSERT INTO `news` (`id`, `title`, `content`, `image`, `create_at`, `update_at`) VALUES
-(1, 'Mùa trung thu năm nay, Hỷ Lâm Môn muốn gửi đến quý khách hàng sản phẩm mới xuất hiện lần đầu tiên tại Việt nam "Bánh trung thu Bơ Sữa HongKong".', 'Những ý tưởng dưới đây sẽ giúp bạn sắp xếp tủ quần áo trong phòng ngủ chật hẹp của mình một cách dễ dàng và hiệu quả nhất. ', 'sample1.jpg', '2017-03-11 06:20:23', '0000-00-00 00:00:00'),
-(2, 'Tư vấn cải tạo phòng ngủ nhỏ sao cho thoải mái và thoáng mát', 'Chúng tôi sẽ tư vấn cải tạo và bố trí nội thất để giúp phòng ngủ của chàng trai độc thân thật thoải mái, thoáng mát và sáng sủa nhất. ', 'sample2.jpg', '2016-10-20 02:07:14', '0000-00-00 00:00:00'),
-(3, 'Đồ gỗ nội thất và nhu cầu, xu hướng sử dụng của người dùng', 'Đồ gỗ nội thất ngày càng được sử dụng phổ biến nhờ vào hiệu quả mà nó mang lại cho không gian kiến trúc. Xu thế của các gia đình hiện nay là muốn đem thiên nhiên vào nhà ', 'sample3.jpg', '2016-10-20 02:07:14', '0000-00-00 00:00:00'),
-(4, 'Hướng dẫn sử dụng bảo quản đồ gỗ, nội thất.', 'Ngày nay, xu hướng chọn vật dụng làm bằng gỗ để trang trí, sử dụng trong văn phòng, gia đình được nhiều người ưa chuộng và quan tâm. Trên thị trường có nhiều sản phẩm mẫu ', 'sample4.jpg', '2016-10-20 02:07:14', '0000-00-00 00:00:00'),
-(5, 'Phong cách mới trong sử dụng đồ gỗ nội thất gia đình', 'Đồ gỗ nội thất gia đình ngày càng được sử dụng phổ biến nhờ vào hiệu quả mà nó mang lại cho không gian kiến trúc. Phong cách sử dụng đồ gỗ hiện nay của các gia đình hầu h ', 'sample5.jpg', '2016-10-20 02:07:14', '0000-00-00 00:00:00');
+INSERT INTO `news` (`id`, `title`, `content`, `image`, `created_at`, `updated_at`) VALUES
+(1, 'Mẹo vệ sinh nồi chiên không dầu đúng cách', 'Nồi chiên không dầu cần được vệ sinh sau mỗi lần sử dụng để đảm bảo độ bền của lớp chống dính.', 'news1.jpg', NOW(), NOW()),
+(2, 'Cách chọn máy lọc nước cho gia đình', 'Tùy vào nguồn nước đầu vào, bạn nên chọn công nghệ RO hoặc Nano.', 'news2.jpg', NOW(), NOW()),
+(3, 'Sắp xếp gian bếp gọn gàng kiểu Nhật', 'Sử dụng kệ đa năng giúp tối ưu hóa diện tích cho căn bếp nhỏ của bạn.', 'news3.jpg', NOW(), NOW()),
+(4, 'Tiêu chí chọn Robot hút bụi thông minh', 'Lực hút và thời lượng pin là hai yếu tố then chốt khi chọn mua máy hút bụi tự động.', 'news4.jpg', NOW(), NOW()),
+(5, 'Lợi ích của máy lọc không khí', 'Giúp loại bỏ bụi mịn và các tác nhân gây dị ứng trong không gian sống.', 'news5.jpg', NOW(), NOW());
 
 -- --------------------------------------------------------
 --
 -- Table structure for table `type_products`
 --
 
+DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `type_products`;
 CREATE TABLE `type_products` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8;
 
 --
 -- Dumping data for table `type_products`
 --
 
 INSERT INTO `type_products` (`id`, `name`, `description`, `image`, `created_at`, `updated_at`) VALUES
-(1, 'Bánh mặn', 'Nếu từng bị mê hoặc bởi các loại tarlet ngọt thì chắn chắn bạn không thể bỏ qua những loại tarlet mặn. Ngoài hình dáng bắt mắt, lớp vở bánh giòn giòn cùng với nhân mặn như thịt gà, nấm, thị heo ,… của bánh sẽ chinh phục bất cứ ai dùng thử.', 'banh-man-thu-vi-nhat-1.jpg', NULL, NULL),
-(2, 'Bánh ngọt', 'Bánh ngọt là một loại thức ăn thường dưới hình thức món bánh dạng bánh mì từ bột nhào, được nướng lên dùng để tráng miệng. Bánh ngọt có nhiều loại, có thể phân loại dựa theo nguyên liệu và kỹ thuật chế biến như bánh ngọt làm từ lúa mì, bơ, bánh ngọt dạng bọt biển. Bánh ngọt có thể phục vụ những mục đính đặc biệt như bánh cưới, bánh sinh nhật, bánh Giáng sinh, bánh Halloween..', '20131108144733.jpg', '2016-10-12 02:16:15', '2016-10-13 01:38:35'),
-(3, 'Bánh trái cây', 'Bánh trái cây, hay còn gọi là bánh hoa quả, là một món ăn chơi, không riêng gì của Huế nhưng khi "lạc" vào mảnh đất Cố đô, món bánh này dường như cũng mang chút tinh tế, cầu kỳ và đặc biệt. Lấy cảm hứng từ những loại trái cây trong vườn, qua bàn tay khéo léo của người phụ nữ Huế, món bánh trái cây ra đời - ngọt thơm, dịu nhẹ làm đẹp lòng biết bao người thưởng thức.', 'banhtraicay.jpg', '2016-10-18 00:33:33', '2016-10-15 07:25:27'),
-(4, 'Bánh kem', 'Với người Việt Nam thì bánh ngọt nói chung đều hay được quy về bánh bông lan – một loại tráng miệng bông xốp, ăn không hoặc được phủ kem lên thành bánh kem. Tuy nhiên, cốt bánh kem thực ra có rất nhiều loại với hương vị, kết cấu và phương thức làm khác nhau chứ không chỉ đơn giản là “bánh bông lan” chung chung đâu nhé!', 'banhkem.jpg', '2016-10-26 03:29:19', '2016-10-26 02:22:22'),
-(5, 'Bánh crepe', 'Crepe là một món bánh nổi tiếng của Pháp, nhưng từ khi du nhập vào Việt Nam món bánh đẹp mắt, ngon miệng này đã làm cho biết bao bạn trẻ phải “xiêu lòng”', 'crepe.jpg', '2016-10-28 04:00:00', '2016-10-27 04:00:23'),
-(6, 'Bánh Pizza', 'Pizza đã không chỉ còn là một món ăn được ưa chuộng khắp thế giới mà còn được những nhà cầm quyền EU chứng nhận là một phần di sản văn hóa ẩm thực châu Âu. Và để được chứng nhận là một nhà sản xuất pizza không hề đơn giản. Người ta phải qua đủ mọi các bước xét duyệt của chính phủ Ý và liên minh châu Âu nữa… tất cả là để đảm bảo danh tiếng cho món ăn này.', 'pizza.jpg', '2016-10-25 17:19:00', NULL),
-(7, 'Bánh su kem', 'Bánh su kem là món bánh ngọt ở dạng kem được làm từ các nguyên liệu như bột mì, trứng, sữa, bơ.... đánh đều tạo thành một hỗn hợp và sau đó bằng thao tác ép và phun qua một cái túi để định hình thành những bánh nhỏ và cuối cùng được nướng chín. Bánh su kem có thể thêm thành phần Sô cô la để tăng vị hấp dẫn. Bánh có xuất xứ từ nước Pháp.', 'sukemdau.jpg', '2016-10-25 17:19:00', NULL);
+(1, 'Đồ gia dụng nhà bếp', 'Nồi, chảo, dao, thớt, hộp đựng thực phẩm…', 'kitchen.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'Thiết bị điện gia dụng', 'Ấm siêu tốc, nồi cơm điện, máy xay, máy hút bụi…', 'electric.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'Vệ sinh - chăm sóc nhà cửa', 'Cây lau nhà, chổi, khăn lau, dung dịch vệ sinh…', 'cleaning.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'Phòng tắm', 'Kệ, móc treo, thảm, vòi sen, phụ kiện phòng tắm…', 'bathroom.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'Đồ dùng phòng ngủ', 'Chăn ga, gối, đèn ngủ, móc treo, hộp đựng…', 'bedroom.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 'Đồ dùng thông minh', 'Giá treo, kệ gấp gọn, phụ kiện tối ưu không gian…', 'smart.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 --
@@ -114,7 +116,7 @@ INSERT INTO `type_products` (`id`, `name`, `description`, `image`, `created_at`,
 --
 
 CREATE TABLE `products` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `id_type` int(10) UNSIGNED DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci,
@@ -123,76 +125,40 @@ CREATE TABLE `products` (
   `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `unit` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `new` tinyint(4) DEFAULT '0',
+  `stock` int(11) DEFAULT '10',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=63;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `id_type`, `description`, `unit_price`, `promotion_price`, `image`, `unit`, `new`, `created_at`, `updated_at`) VALUES
-(1, 'Bánh Crepe Sầu riêng', 5, 'Bánh crepe sầu riêng nhà làm', 150000, 120000, '1430967449-pancake-sau-rieng-6.jpg', 'hộp', 1, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(2, 'Bánh Crepe Chocolate', 6, '', 180000, 160000, 'crepe-chocolate.jpg', 'hộp', 1, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(3, 'Bánh Crepe Sầu riêng - Chuối', 5, '', 150000, 120000, 'crepe-chuoi.jpg', 'hộp', 0, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(4, 'Bánh Crepe Đào', 5, '', 160000, 0, 'crepe-dao.jpg', 'hộp', 0, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(5, 'Bánh Crepe Dâu', 5, '', 160000, 0, 'crepedau.jpg', 'hộp', 0, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(6, 'Bánh Crepe Pháp', 5, '', 200000, 180000, 'crepe-phap.jpg', 'hộp', 0, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(7, 'Bánh Crepe Táo', 5, '', 160000, 0, 'crepe-tao.jpg', 'hộp', 1, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(8, 'Bánh Crepe Trà xanh', 5, '', 160000, 150000, 'crepe-traxanh.jpg', 'hộp', 0, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(9, 'Bánh Crepe Sầu riêng và Dứa', 5, '', 160000, 150000, 'saurieng-dua.jpg', 'hộp', 0, '2016-10-26 03:00:16', '2016-10-24 22:11:00'),
-(11, 'Bánh Gato Trái cây Việt Quất', 3, '', 250000, 0, '544bc48782741.png', 'cái', 0, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(12, 'Bánh sinh nhật rau câu trái cây', 3, '', 200000, 180000, '210215-banh-sinh-nhat-rau-cau-body- (6).jpg', 'cái', 0, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(13, 'Bánh kem Chocolate Dâu', 3, '', 300000, 280000, 'banh kem sinh nhat.jpg', 'cái', 1, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(14, 'Bánh kem Dâu III', 3, '', 300000, 280000, 'Banh-kem (6).jpg', 'cái', 0, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(15, 'Bánh kem Dâu I', 3, '', 350000, 320000, 'banhkem-dau.jpg', 'cái', 1, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(16, 'Bánh trái cây II', 3, '', 150000, 120000, 'banhtraicay.jpg', 'hộp', 0, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(17, 'Apple Cake', 3, '', 250000, 240000, 'Fruit-Cake_7979.jpg', 'cai', 0, '2016-10-12 02:00:00', '2016-10-27 02:24:00'),
-(18, 'Bánh ngọt nhân cream táo', 2, '', 180000, 0, '20131108144733.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(19, 'Bánh Chocolate Trái cây', 2, '', 150000, 0, 'Fruit-Cake_7976.jpg', 'hộp', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(20, 'Bánh Chocolate Trái cây II', 2, '', 150000, 0, 'Fruit-Cake_7981.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(21, 'Peach Cake', 2, '', 160000, 150000, 'Peach-Cake_3294.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(22, 'Bánh bông lan trứng muối I', 1, '', 160000, 150000, 'banhbonglantrung.jpg', 'hộp', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(23, 'Bánh bông lan trứng muối II', 1, '', 180000, 0, 'banhbonglantrungmuoi.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(24, 'Bánh French', 1, '', 180000, 0, 'banh-man-thu-vi-nhat-1.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(25, 'Bánh mì Australia', 1, '', 80000, 70000, 'dung-khoai-tay-lam-banh-gato-man-cuc-ngon.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(26, 'Bánh mặn thập cẩm', 1, '', 50000, 0, 'Fruit-Cake.png', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(27, 'Bánh Muffins trứng', 1, '', 100000, 80000, 'maxresdefault.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(28, 'Bánh Scone Peach Cake', 1, '', 120000, 0, 'Peach-Cake_3300.jpg', 'hộp', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(29, 'Bánh mì Loaf I', 1, '', 100000, 0, 'sli12.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(30, 'Bánh kem Chocolate Dâu I', 4, '', 380000, 350000, 'sli12.jpg', 'cái', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(31, 'Bánh kem Trái cây I', 4, '', 380000, 350000, 'Fruit-Cake.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(32, 'Bánh kem Trái cây II', 4, '', 380000, 350000, 'Fruit-Cake_7971.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(33, 'Bánh kem Doraemon', 4, '', 280000, 250000, 'p1392962167_banh74.jpg', 'cái', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(34, 'Bánh kem Caramen Pudding', 4, '', 280000, 0, 'Caramen-pudding636099031482099583.jpg', 'cái', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(35, 'Bánh kem Chocolate Fruit', 4, '', 320000, 300000, 'chocolate-fruit636098975917921990.jpg', 'cái', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(36, 'Bánh kem Coffee Chocolate GH6', 4, '', 320000, 300000, 'COFFE-CHOCOLATE636098977566220885.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(37, 'Bánh kem Mango Mouse', 4, '', 320000, 300000, 'mango-mousse-cake.jpg', 'cái', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(38, 'Bánh kem Matcha Mouse', 4, '', 350000, 330000, 'MATCHA-MOUSSE.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(39, 'Bánh kem Flower Fruit', 4, '', 350000, 330000, 'flower-fruits636102461981788938.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(40, 'Bánh kem Strawberry Delight', 4, '', 350000, 330000, 'strawberry-delight636102445035635173.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(41, 'Bánh kem Raspberry Delight', 4, '', 350000, 330000, 'raspberry.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(42, 'Beefy Pizza', 6, 'Thịt bò xay, ngô, sốt BBQ, phô mai mozzarella', 150000, 130000, '40819_food_pizza.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(43, 'Hawaii Pizza', 6, 'Sốt cà chua, ham , dứa, pho mai mozzarella', 120000, 0, 'hawaiian paradise_large-900x900.jpg', 'cái', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(44, 'Smoke Chicken Pizza', 6, 'Gà hun khói,nấm, sốt cà chua, pho mai mozzarella.', 120000, 0, 'chicken black pepper_large-900x900.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(45, 'Sausage Pizza', 6, 'Xúc xích klobasa, Nấm, Ngô, sốtcà chua, pho mai Mozzarella.', 120000, 0, 'pizza-miami.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(46, 'Ocean Pizza', 6, 'Tôm , mực, xào cay,ớt xanh, hành tây, cà chua, phomai mozzarella.', 120000, 0, 'seafood curry_large-900x900.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(47, 'All Meaty Pizza', 6, 'Ham, bacon, chorizo, pho mai mozzarella.', 140000, 0, 'all1).jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(48, 'Tuna Pizza', 6, 'Cá Ngừ, sốt Mayonnaise,sốt càchua, hành tây, pho mai Mozzarella', 140000, 0, '54eaf93713081_-_07-germany-tuna.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(49, 'Bánh su kem nhân dừa', 7, '', 120000, 100000, 'maxresdefault.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(50, 'Bánh su kem sữa tươi', 7, '', 120000, 100000, 'sukem.jpg', 'cái', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(51, 'Bánh su kem sữa tươi chiên giòn', 7, '', 150000, 0, '1434429117-banh-su-kem-chien-20.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(52, 'Bánh su kem dâu sữa tươi', 7, '', 150000, 0, 'sukemdau.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(53, 'Bánh su kem bơ sữa tươi', 7, '', 150000, 0, 'He-Thong-Banh-Su-Singapore-Chewy-Junior.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(54, 'Bánh su kem nhân trái cây sữa tươi', 7, '', 150000, 0, 'foody-banh-su-que-635930347896369908.jpg', 'hộp', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(55, 'Bánh su kem cà phê', 7, '', 150000, 0, 'banh-su-kem-ca-phe-1.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(56, 'Bánh su kem phô mai', 7, '', 150000, 0, '50020041-combo-20-banh-su-que-pho-mai-9.jpg', 'hộp', 0, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(57, 'Bánh su kem sữa tươi chocolate', 7, '', 150000, 0, 'combo-20-banh-su-que-kem-sua-tuoi-phu-socola.jpg', 'hộp', 1, '2016-10-13 02:20:00', '2016-10-19 03:20:00'),
-(58, 'Bánh Macaron Pháp', 2, 'Thưởng thức macaron, người ta có thể tìm thấy từ những hương vị truyền thống như mâm xôi, chocolate, cho đến những hương vị mới như nấm và trà xanh. Macaron với vị giòn tan của vỏ bánh, béo ngậy ngọt ngào của phần nhân, với vẻ ngoài đáng yêu và nhiều màu sắc đẹp mắt, đây là món bạn không nên bỏ qua khi khám phá nền ẩm thực Pháp.', 200000, 180000, 'Macaron9.jpg', '', 0, '2016-10-26 17:00:00', '2016-10-11 17:00:00'),
-(59, 'Bánh Tiramisu - Italia', 2, 'Chỉ cần cắn một miếng, bạn sẽ cảm nhận được tất cả các hương vị đó hòa quyện cùng một chính vì thế người ta còn ví món bánh này là Thiên đường trong miệng của bạn', 200000, 0, '234.jpg', '', 0, '2016-10-26 17:00:00', '2016-10-11 17:00:00'),
-(60, 'Bánh Táo - Mỹ', 2, 'Bánh táo Mỹ với phần vỏ bánh mỏng, giòn mềm, ẩn chứa phần nhân táo thơm ngọt, điểm chút vị chua dịu của trái cây quả sẽ là một lựa chọn hoàn hảo cho những tín đồ bánh ngọt trên toàn thế giới.', 200000, 0, '1234.jpg', '', 0, '2016-10-26 17:00:00', '2016-10-11 17:00:00'),
-(61, 'Bánh Cupcake - Anh Quốc', 6, 'Những chiếc cupcake có cấu tạo gồm phần vỏ bánh xốp mịn và phần kem trang trí bên trên rất bắt mắt với nhiều hình dạng và màu sắc khác nhau. Cupcake còn được cho là chiếc bánh mang lại niềm vui và tiếng cười như chính hình dáng đáng yêu của chúng.', 150000, 120000, 'cupcake.jpg', 'cái', 1, NULL, NULL),
-(62, 'Bánh Sachertorte', 6, 'Sachertorte là một loại bánh xốp được tạo ra bởi loại&nbsp;chocholate&nbsp;tuyệt hảo nhất của nước Áo. Sachertorte có vị ngọt nhẹ, gồm nhiều lớp bánh được làm từ ruột bánh mì và bánh sữa chocholate, xen lẫn giữa các lớp bánh là mứt mơ. Món bánh chocholate này nổi tiếng tới mức thành phố Vienna của Áo đã ấn định&nbsp;tổ chức một ngày Sachertorte quốc gia, vào 5/12 hằng năm', 250000, 220000, '111.jpg', 'cái', 0, NULL, NULL);
+INSERT INTO `products` (`id`, `name`, `id_type`, `description`, `unit_price`, `promotion_price`, `image`, `unit`, `new`, `stock`, `created_at`, `updated_at`) VALUES
+(1, 'Chảo chống dính 24cm', 1, 'Chảo chống dính cao cấp dùng cho mọi loại bếp, phủ lớp chống dính bền bỉ, tay cầm cách nhiệt an toàn.', 259000, 219000, 'chao.jpg', 'cái', 1, 50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'Nồi inox 3 đáy 20cm', 1, 'Nồi inox 304 cao cấp, thiết kế 3 đáy truyền nhiệt cực nhanh và giữ nhiệt tốt, phù hợp mọi loại bếp.', 349000, 0, 'noi-inox.jpg', 'cái', 1, 40, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'Bộ dao nhà bếp 5 món', 1, 'Bộ dao thép không gỉ sắc bén, thiết kế công thái học gồm dao chặt, dao thái và kéo nhà bếp tiện dụng.', 199000, 149000, 'bo-dao.jpg', 'bộ', 0, 60, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'Hộp đựng thực phẩm 1L', 1, 'Hộp nhựa nguyên sinh an toàn sức khỏe, nắp kín khí tuyệt đối giúp bảo quản thực phẩm tươi lâu trong tủ lạnh.', 49000, 0, 'hop-thuc-pham.jpg', 'hộp', 0, 200, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'Thớt gỗ tre kháng khuẩn', 1, 'Thớt gỗ tre tự nhiên, bề mặt cứng cáp không để lại vết dao sâu, kháng khuẩn tự nhiên, dễ vệ sinh.', 89000, 69000, 'thot.jpg', 'cái', 0, 110, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 'Muỗng canh inox 6 chiếc', 1, 'Bộ 6 muỗng canh inox sáng bóng, không gỉ sét, thiết kế sang trọng làm đẹp không gian bàn ăn.', 45000, 0, 'muong.jpg', 'bộ', 1, 300, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 'Ấm siêu tốc 1.8L', 2, 'Ấm siêu tốc đun nước nhanh chóng, tích hợp cảm biến tự động ngắt khi sôi và khi cạn nước, an toàn tuyệt đối.', 289000, 249000, 'am.jpg', 'cái', 1, 80, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 'Máy xay sinh tố 1.2L', 2, 'Máy xay đa năng công suất lớn, lưỡi dao thép không gỉ cực bén, xay nhuyễn mịn mọi loại trái cây và đá.', 499000, 399000, 'may-xay.jpg', 'cái', 1, 30, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 'Máy hút bụi mini', 2, 'Máy hút bụi cầm tay nhỏ gọn, lực hút mạnh mẽ giúp vệ sinh sạch sẽ các ngóc ngách khó tiếp cận trong nhà và ô tô.', 399000, 0, 'may-hut-bui.jpg', 'cái', 0, 25, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 'Quạt đứng điều khiển', 2, 'Quạt đứng sang trọng có điều khiển từ xa, nhiều chế độ gió linh hoạt, vận hành êm ái không gây ồn.', 459000, 399000, 'quat.jpg', 'cái', 0, 22, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(11, 'Bàn ủi hơi nước', 2, 'Bàn ủi hơi nước cầm tay nhỏ gọn, xóa tan mọi nếp nhăn quần áo nhanh chóng, phù hợp mang đi du lịch.', 329000, 0, 'ban-ui.jpg', 'cái', 1, 18, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(12, 'Cây lau nhà tự vắt', 3, 'Cây lau nhà thông minh xoay 360 độ, cơ chế tự vắt nước cực sạch không cần chạm tay, tiết kiệm sức lao động.', 179000, 149000, 'choi.jpg', 'bộ', 0, 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(13, 'Dung dịch vệ sinh sàn (1L)', 3, 'Nước lau sàn đậm đặc với hương thơm dịu nhẹ lâu phai, giúp diệt khuẩn và làm sạch bóng mọi bề mặt sàn.', 65000, 0, 'nuoc-lau-san.jpg', 'chai', 0, 150, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(14, 'Găng tay cao su (đôi)', 3, 'Găng tay cao su dẻo dai, chống thấm nước, bảo vệ đôi tay khỏi hóa chất tẩy rửa khi làm việc nhà.', 25000, 0, 'gang-tay.jpg', 'đôi', 1, 400, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(15, 'Khăn microfiber 5 miếng', 3, 'Bộ 5 khăn lau đa năng microfiber siêu thấm hút, mềm mại, không để lại bụi vải hay vết trầy xước trên đồ vật.', 79000, 59000, 'khan.jpg', 'bộ', 0, 95, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(16, 'Kệ góc nhà tắm inox', 4, 'Kệ inox 304 cao cấp không gỉ sét, chịu lực cực tốt, giúp tối ưu diện tích và làm gọn không gian phòng tắm.', 129000, 99000, 'ke-tam.jpg', 'cái', 1, 70, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(17, 'Thảm chống trượt nhà tắm', 4, 'Thảm silicon chống trượt cao cấp, độ bám dính bề mặt cực tốt, an toàn tuyệt đối cho người già và trẻ nhỏ.', 79000, 59000, 'tham.jpg', 'cái', 0, 120, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(18, 'Vòi sen tăng áp', 4, 'Vòi sen công nghệ tăng áp lực nước mạnh mẽ, tiết kiệm nước hiệu quả và mang lại cảm giác thư giãn khi tắm.', 189000, 0, 'voi-sen.jpg', 'cái', 0, 40, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(19, 'Đèn ngủ cảm biến', 5, 'Đèn ngủ thông minh tự động sáng khi trời tối, ánh sáng vàng dịu mắt giúp bạn dễ đi vào giấc ngủ sâu.', 119000, 0, 'den-ngu.jpg', 'cái', 0, 90, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(20, 'Gối memory foam', 5, 'Gối cao su non đàn hồi chậm giúp nâng đỡ tối ưu đốt sống cổ, giảm hẳn đau mỏi vai gáy sau khi thức dậy.', 299000, 259000, 'goi.jpg', 'cái', 1, 45, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(21, 'Tấm phủ giường chống bụi', 5, 'Tấm phủ chất liệu cao cấp giúp bảo vệ nệm khỏi bụi bẩn, vi khuẩn và mồ hôi, dễ dàng tháo rời để giặt sạch.', 139000, 99000, 'tam-phu.jpg', 'cái', 0, 55, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(22, 'Giá treo chổi dán tường', 6, 'Giá treo thông minh dán tường siêu chắc không cần khoan, giúp sắp xếp gọn gàng chổi và các dụng cụ vệ sinh.', 59000, 0, 'gia-treo.jpg', 'cái', 0, 180, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(23, 'Kệ để đồ gấp gọn 3 tầng', 6, 'Kệ thép sơn tĩnh điện thiết kế gấp gọn linh hoạt, giải pháp hoàn hảo để tối ưu không gian lưu trữ cho gia đình.', 349000, 299000, 'ke-3-tang.jpg', 'cái', 1, 35, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(24, 'Hộp đựng đồ đa năng có nắp', 6, 'Hộp vải khung cứng đựng đồ cá nhân hoặc quần áo, có nắp đậy ngăn bụi, giúp căn phòng luôn ngăn nắp sạch sẽ.', 89000, 69000, 'hop-da-nang.jpg', 'cái', 0, 130, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- --------------------------------------------------------
 
@@ -200,11 +166,12 @@ INSERT INTO `products` (`id`, `name`, `id_type`, `description`, `unit_price`, `p
 -- Table structure for table `slide`
 --
 
+-- DROP TABLE IF EXISTS `slide`; -- Removed, as PRIMARY KEY AUTO_INCREMENT is added below
 CREATE TABLE `slide` (
-  `id` int(11) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `link` varchar(100) NOT NULL,
   `image` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `slide`
@@ -221,14 +188,40 @@ INSERT INTO `slide` (`id`, `link`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shipping_fees`
+--
+
+DROP TABLE IF EXISTS `shipping_fees`;
+CREATE TABLE `shipping_fees` (
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fee` float NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `shipping_fees`
+--
+
+INSERT INTO `shipping_fees` (`id`, `name`, `fee`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Nội thành TP.HCM', 20000, 1, NOW(), NOW()),
+(2, 'Ngoại thành TP.HCM', 35000, 1, NOW(), NOW()),
+(3, 'Tỉnh thành khác', 50000, 1, NOW(), NOW());
+
+-- --------------------------------------------------------
+--
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `full_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `level` int(11) DEFAULT '0' COMMENT '1:admin, 2:staff, 3:user',
   `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -240,29 +233,57 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
-(6, 'Hương Hương', 'huonghuong08.php@gmail.com', '$2y$10$rGY4KT6ZSMmLnxIbmTXrsu2xdgRxm8x0UTwCyYCAzrJ320kYheSRq', '23456789', 'Hoàng Diệu 2', NULL, '2017-03-23 07:17:33', '2017-03-23 07:17:33');
+INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `level`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
+(6, 'Quản trị viên', 'admin@gmail.com', '$2y$10$rGY4KT6ZSMmLnxIbmTXrsu2xdgRxm8x0UTwCyYCAzrJ320kYheSRq', 1, '0987654321', 'TP. HCM', NULL, NOW(), NOW());
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlists`
+--
+
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `wishlists`;
+CREATE TABLE `wishlists` (
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `product_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  CONSTRAINT `wishlists_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `wishlists_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+SET FOREIGN_KEY_CHECKS=1;
+
+-- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `bills`;
 CREATE TABLE `bills` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `id_customer` int(11) DEFAULT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `id_customer` int(10) UNSIGNED DEFAULT NULL, -- Khóa ngoại tới bảng customer
+  `user_id` int(10) UNSIGNED DEFAULT NULL, -- Khóa ngoại tới bảng users (người dùng đăng nhập đặt hàng)
   `date_order` date DEFAULT NULL,
-  `total` float DEFAULT NULL COMMENT 'tổng tiền',
+  `subtotal` float DEFAULT NULL COMMENT 'tổng tiền các sản phẩm (chưa bao gồm phí ship và giảm giá)',
+  `shipping_fee` float DEFAULT NULL COMMENT 'phí vận chuyển',
+  `coupon_code` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'mã giảm giá đã áp dụng',
+  `discount_amount` float DEFAULT NULL COMMENT 'số tiền giảm giá',
+  `total` float DEFAULT NULL COMMENT 'tổng tiền cuối cùng (sau khi áp dụng phí ship và giảm giá)',
   `payment` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'hình thức thanh toán',
   `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `status` varchar(50) COLLATE utf8_unicode_ci DEFAULT 'Mới' COMMENT 'trạng thái đơn hàng',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `bills`
 --
 
 INSERT INTO `bills` (`id`, `id_customer`, `date_order`, `total`, `payment`, `note`, `created_at`, `updated_at`) VALUES
-(14, 14, '2017-03-23', 160000, 'COD', 'k', '2017-03-23 04:46:05', '2017-03-23 04:46:05'),
-(13, 13, '2017-03-21', 400000, 'ATM', 'Vui lòng giao hàng trước 5h', '2017-03-21 07:29:31', '2017-03-21 07:29:31'),
-(12, 12, '2017-03-21', 520000, 'COD', 'Vui lòng chuyển đúng hạn', '2017-03-21 07:20:07', '2017-03-21 07:20:07'),
-(11, 11, '2017-03-21', 420000, 'COD', 'không chú', '2017-03-21 07:16:09', '2017-03-21 07:16:09'),
-(15, 15, '2017-03-24', 220000, 'COD', 'e', '2017-03-24 07:14:32', '2017-03-24 07:14:32');
+(14, 14, '2023-10-01', 468000, 'COD', 'Giao giờ hành chính', NOW(), NOW()), -- Các cột mới sẽ nhận giá trị DEFAULT NULL
+(13, 13, '2023-10-02', 259000, 'ATM', 'Hàng dễ vỡ', NOW(), NOW()),
+(12, 12, '2023-10-03', 179000, 'COD', '', NOW(), NOW()),
+(11, 11, '2023-10-04', 289000, 'COD', '', NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -270,29 +291,26 @@ INSERT INTO `bills` (`id`, `id_customer`, `date_order`, `total`, `payment`, `not
 -- Table structure for table `bill_detail`
 --
 
+DROP TABLE IF EXISTS `bill_detail`;
 CREATE TABLE `bill_detail` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `id_bill` int(10) NOT NULL,
-  `id_product` int(10) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `id_bill` int(10) UNSIGNED NOT NULL,
+  `id_product` int(10) UNSIGNED NOT NULL,
   `quantity` int(11) NOT NULL COMMENT 'số lượng',
-  `unit_price` double NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `unit_price` float NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `bill_detail`
 --
 
 INSERT INTO `bill_detail` (`id`, `id_bill`, `id_product`, `quantity`, `unit_price`, `created_at`, `updated_at`) VALUES
-(18, 15, 62, 5, 220000, '2017-03-24 07:14:32', '2017-03-24 07:14:32'),
-(17, 14, 2, 1, 160000, '2017-03-23 04:46:05', '2017-03-23 04:46:05'),
-(16, 13, 60, 1, 200000, '2017-03-21 07:29:31', '2017-03-21 07:29:31'),
-(15, 13, 59, 1, 200000, '2017-03-21 07:29:31', '2017-03-21 07:29:31'),
-(14, 12, 60, 2, 200000, '2017-03-21 07:20:07', '2017-03-21 07:20:07'),
-(13, 12, 61, 1, 120000, '2017-03-21 07:20:07', '2017-03-21 07:20:07'),
-(12, 11, 61, 1, 120000, '2017-03-21 07:16:09', '2017-03-21 07:16:09'),
-(11, 11, 57, 2, 150000, '2017-03-21 07:16:09', '2017-03-21 07:16:09');
+(17, 14, 1, 2, 219000, NOW(), NOW()),
+(16, 13, 2, 1, 259000, NOW(), NOW()),
+(14, 12, 3, 1, 179000, NOW(), NOW()),
+(11, 11, 2, 1, 289000, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -305,52 +323,38 @@ INSERT INTO `bill_detail` (`id`, `id_bill`, `id_product`, `quantity`, `unit_pric
 -- Indexes for table `bills`
 --
 ALTER TABLE `bills`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `bills_ibfk_1` (`id_customer`);
+  ADD KEY `bills_id_customer_idx` (`id_customer`),
+  ADD KEY `bills_user_id_idx` (`user_id`);
 
 --
 -- Indexes for table `bill_detail`
 --
 ALTER TABLE `bill_detail`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `bill_detail_ibfk_2` (`id_product`);
 
 --
 -- Indexes for table `customer`
 --
-ALTER TABLE `customer`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `news`
 --
-ALTER TABLE `news`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `products_id_type_foreign` (`id_type`);
 
 --
 -- Indexes for table `slide`
 --
-ALTER TABLE `slide`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `type_products`
---
-ALTER TABLE `type_products`
-  ADD PRIMARY KEY (`id`);
+-- PRIMARY KEY (`id`) đã được thêm trực tiếp vào CREATE TABLE
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
@@ -361,46 +365,58 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bills`
 --
 ALTER TABLE `bills`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `bill_detail`
 --
 ALTER TABLE `bill_detail`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  AUTO_INCREMENT=63;
 --
 -- AUTO_INCREMENT for table `slide`
 --
 ALTER TABLE `slide`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `type_products`
 --
 ALTER TABLE `type_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  AUTO_INCREMENT=7;
 --
 -- Constraints for dumped tables
 --
 
+-- Constraints for table `bills`
 --
+ALTER TABLE `bills` ADD CONSTRAINT `bills_id_customer_foreign` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id`) ON DELETE SET NULL;
+ALTER TABLE `bills` ADD CONSTRAINT `bills_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 -- Constraints for table `products`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_id_type_foreign` FOREIGN KEY (`id_type`) REFERENCES `type_products` (`id`);
+
+-- Constraints for table `bill_detail`
+--
+ALTER TABLE `bill_detail`
+  ADD CONSTRAINT `bill_detail_id_bill_foreign` FOREIGN KEY (`id_bill`) REFERENCES `bills` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `bill_detail_id_product_foreign` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+-- Bật lại kiểm tra khóa ngoại sau khi hoàn tất
+SET FOREIGN_KEY_CHECKS=1;
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

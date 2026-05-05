@@ -10,6 +10,20 @@ class BillDetail extends Model
     use HasFactory;
     protected $table = 'bill_detail';
 
+    protected $fillable = [
+        'id_bill',
+        'id_product',
+        'quantity',
+        'unit_price',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'unit_price' => 'decimal:2',
+        ];
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'id_product', 'id');

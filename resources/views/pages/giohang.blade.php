@@ -16,7 +16,7 @@
 
 <div class="container">
     <div id="content">
-        
+
         <div class="table-responsive">
             <!-- Shop Products Table -->
             <table class="shop_table beta-shopping-cart-table" cellspacing="0">
