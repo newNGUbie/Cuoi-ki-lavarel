@@ -186,6 +186,7 @@ a:focus {
 
 .hw-quick-actions {
 	display: flex;
+	align-items: center;
 	gap: 30px;
 }
 
@@ -224,6 +225,25 @@ a:focus {
 	justify-content: center;
 	font-weight: 700;
 	border: 2px solid #fff;
+}
+
+.hw-btn-auth {
+    display: inline-block;
+    padding: 8px 18px;
+    border: 2px solid var(--hw-teal);
+    color: var(--hw-teal) !important;
+    border-radius: 23px;
+    font-weight: 700;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+.hw-btn-auth:hover {
+    background: var(--hw-teal);
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(14, 124, 123, 0.25);
 }
 
 .hw-action-label {

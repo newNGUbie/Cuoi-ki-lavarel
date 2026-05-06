@@ -95,10 +95,9 @@
                     </div>
                 @else
                     <div class="hw-action-item">
-                        <a class="hw-icon-btn" href="{{ route('getlogin') }}">
-                            <i class="fa fa-user-circle"></i>
+                        <a href="{{ route('getlogin') }}" class="hw-btn-auth">
+                            Đăng nhập / Đăng ký
                         </a>
-                        <span class="hw-action-label">Đăng nhập / Đăng ký</span>
                     </div>
                 @endif
             </div>
