@@ -1,27 +1,4 @@
 <div id="header" class="hw-header">
-    <div class="header-top hw-topbar">
-        <div class="container hw-topbar-inner">
-            <div class="hw-top-left">
-                <div class="hw-top-item"><i class="fa fa-map-marker"></i> 123 Đường Láng, Đống Đa, Hà Nội</div>
-                <a href="tel:02834567890" class="hw-top-item"><i class="fa fa-phone"></i> 028 3456 7890</a>
-            </div>
-            <div class="hw-top-right">
-                @if (Auth::check())
-                    @php($isAdminUser = in_array(Auth::user()->level, [1, 2]))
-                    <a href="{{ route('user.profile') }}" class="hw-top-item"><i class="fa fa-user"></i>
-                        {{ Auth::user()->full_name }}</a>
-                    @if ($isAdminUser)
-                        <a class="hw-top-item" href="{{ route('admin.getCateList') }}"><i class="fa fa-dashboard"></i>
-                            Quản trị</a>
-                    @endif
-                    <a href="{{ route('getlogout') }}" class="hw-top-item"><i class="fa fa-sign-out"></i> Đăng xuất</a>
-                @else
-                    <a href="{{ route('getsignin') }}" class="hw-top-item">Đăng ký</a>
-                    <a href="{{ route('getlogin') }}" class="hw-top-item highlight">Đăng nhập</a>
-                @endif
-            </div>
-        </div>
-    </div>
 
     <div class="header-body hw-brandbar">
         <div class="container hw-brandbar-inner">
@@ -42,6 +19,35 @@
             </div>
 
             <div class="hw-quick-actions">
+                @if (Auth::check())
+                    <div class="hw-action-item hw-user">
+                        <a class="hw-icon-btn" href="{{ route('user.profile') }}">
+                            <i class="fa fa-user"></i>
+                        </a>
+                        <span class="hw-action-label">{{ Auth::user()->full_name }}</span>
+                        <div class="hw-user-dropdown">
+                            <a href="{{ route('user.profile') }}"><i class="fa fa-user-circle"></i> Hồ sơ</a>
+                            @if (in_array(Auth::user()->level, [1, 2]))
+                                <a href="{{ route('admin.getCateList') }}"><i class="fa fa-dashboard"></i> Quản trị</a>
+                            @endif
+                            <a href="{{ route('getlogout') }}" class="logout"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+                        </div>
+                    </div>
+                @else
+                    <div class="hw-action-item">
+                        <a class="hw-icon-btn" href="{{ route('getlogin') }}">
+                            <i class="fa fa-sign-in"></i>
+                        </a>
+                        <span class="hw-action-label">Đăng nhập</span>
+                    </div>
+                    <div class="hw-action-item">
+                        <a class="hw-icon-btn" href="{{ route('getsignin') }}">
+                            <i class="fa fa-user-plus"></i>
+                        </a>
+                        <span class="hw-action-label">Đăng ký</span>
+                    </div>
+                @endif
+
                 <div class="hw-action-item">
                     <a class="hw-icon-btn" href="{{ route('wishlist.index') }}">
                         <i class="fa fa-heart"></i>
